@@ -15,6 +15,7 @@ ENV UV_SYSTEM_PYTHON=1 \
 # Copy pyproject.toml and gateway package for FAST installation
 COPY pyproject.toml .
 COPY gateway/ gateway/
+COPY tools/ tools/
 
 # Copy and install agent-specific requirements first
 COPY patterns/langgraph-single-agent/requirements.txt requirements.txt
@@ -33,6 +34,7 @@ EXPOSE 8080
 
 # Copy only the agent code
 COPY patterns/langgraph-single-agent/langgraph_agent.py .
+COPY patterns/langgraph-single-agent/langgraph_code_interpreter.py .
 COPY patterns/utils/ utils/
 
 # Healthcheck using Python (no extra dependencies needed)

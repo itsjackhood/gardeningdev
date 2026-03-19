@@ -2,7 +2,6 @@ import json
 import os
 import traceback
 
-import boto3
 from bedrock_agentcore.identity.auth import requires_access_token
 from bedrock_agentcore.memory.integrations.strands.config import AgentCoreMemoryConfig
 from bedrock_agentcore.memory.integrations.strands.session_manager import (
@@ -117,9 +116,8 @@ def create_basic_agent(user_id: str, session_id: str) -> Agent:
         region_name=os.environ.get("AWS_DEFAULT_REGION", "us-east-1"),
     )
 
-    # Initialize Code Interpreter tools with boto3 session
+    # Initialize Code Interpreter tools
     region = os.environ.get("AWS_DEFAULT_REGION", "us-east-1")
-    session = boto3.Session(region_name=region)
     code_tools = StrandsCodeInterpreterTools(region)
 
     try:

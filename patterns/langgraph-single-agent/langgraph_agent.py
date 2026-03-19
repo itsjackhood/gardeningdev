@@ -4,8 +4,8 @@
 from langgraph.prebuilt import create_react_agent
 from langchain_aws import ChatBedrock
 from langchain_mcp_adapters.client import MultiServerMCPClient
+from langgraph_code_interpreter import LangGraphCodeInterpreterTools
 import os
-import boto3
 from bedrock_agentcore.identity.auth import requires_access_token
 from bedrock_agentcore.runtime import BedrockAgentCoreApp, RequestContext
 import traceback
@@ -175,6 +175,12 @@ async def agent_stream(payload, context: RequestContext):
         print("[STREAM] Loading Gateway tools...")
         tools = await mcp_client.get_tools()
         print(f"[STREAM] Loaded {len(tools)} tools from Gateway")
+
+        # Code Interpreter
+        region = os.environ.get("AWS_DEFAULT_REGION", "us-east-1")
+        code_tools = LangGraphCodeInterpreterTools(region)
+        tools.append(code_tools.execute_python_securely)
+        print("[STREAM] Code Interpreter loaded")
         
         # Create agent with the loaded tools
         graph = await create_langgraph_agent(user_id, session_id, tools)

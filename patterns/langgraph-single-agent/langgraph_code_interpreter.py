@@ -1,4 +1,4 @@
-"""LangGraph-specific wrapper for Code Interpreter."""
+"""LangGraph-specific wrapper for Code Interpreter - import shim."""
 
 from langchain_core.tools import tool
 from tools.code_interpreter.code_interpreter_tools import CodeInterpreterTools
@@ -19,21 +19,28 @@ class LangGraphCodeInterpreterTools:
     def cleanup(self):
         """
         Clean up code interpreter session.
-        
+
         Note: AgentCore automatically cleans up inactive sessions after timeout,
         so manual cleanup is optional but recommended for immediate resource release.
         """
         self.core_tools.cleanup()
 
-    @tool
-    def execute_python_securely(self, code: str) -> str:
-        """
-        Execute Python code in a secure AgentCore CodeInterpreter sandbox.
+    @property
+    def execute_python_securely(self):
+        """Get the execute_python_securely tool function."""
+        core = self.core_tools
 
-        Args:
-            code: Python code to execute
+        @tool
+        def execute_python_securely(code: str) -> str:
+            """
+            Execute Python code in a secure AgentCore CodeInterpreter sandbox.
 
-        Returns:
-            JSON string with execution result
-        """
-        return self.core_tools.execute_python_securely(code)
+            Args:
+                code: Python code to execute
+
+            Returns:
+                JSON string with execution result
+            """
+            return core.execute_python_securely(code)
+
+        return execute_python_securely

@@ -7,12 +7,57 @@ RequestContext (prevents impersonation via prompt injection).
 
 import logging
 import os
+import uuid
 
 import jwt
+from fastapi import Request
 from bedrock_agentcore.identity.auth import requires_access_token
 from bedrock_agentcore.runtime import RequestContext
+from bedrock_agentcore.runtime.context import BedrockAgentCoreContext
+from bedrock_agentcore.runtime.models import (
+    ACCESS_TOKEN_HEADER,
+    AUTHORIZATION_HEADER,
+    CUSTOM_HEADER_PREFIX,
+    OAUTH2_CALLBACK_URL_HEADER,
+    REQUEST_ID_HEADER,
+    SESSION_HEADER,
+)
 
 logger = logging.getLogger(__name__)
+
+
+def setup_agentcore_context(request: Request) -> None:
+    """Populate BedrockAgentCoreContext ContextVars from Runtime-injected headers.
+
+    Replicates what BedrockAgentCoreApp._build_request_context() does internally.
+    Required for AG-UI patterns that use raw FastAPI instead of BedrockAgentCoreApp.
+    Call at the top of /invocations before any SDK code that reads context
+    (e.g. @requires_access_token).
+    """
+    headers = request.headers
+
+    request_id = headers.get(REQUEST_ID_HEADER) or str(uuid.uuid4())
+    session_id = headers.get(SESSION_HEADER)
+    BedrockAgentCoreContext.set_request_context(request_id, session_id)
+
+    token = headers.get(ACCESS_TOKEN_HEADER)
+    if token:
+        BedrockAgentCoreContext.set_workload_access_token(token)
+
+    callback_url = headers.get(OAUTH2_CALLBACK_URL_HEADER)
+    if callback_url:
+        BedrockAgentCoreContext.set_oauth2_callback_url(callback_url)
+
+    req_headers = {}
+    auth = headers.get(AUTHORIZATION_HEADER)
+    if auth:
+        req_headers[AUTHORIZATION_HEADER] = auth
+    for name, value in headers.items():
+        if name.lower().startswith(CUSTOM_HEADER_PREFIX.lower()):
+            req_headers[name] = value
+    if req_headers:
+        BedrockAgentCoreContext.set_request_headers(req_headers)
+
 
 def extract_user_id_from_context(context: RequestContext) -> str:
     """
@@ -72,6 +117,36 @@ def extract_user_id_from_context(context: RequestContext) -> str:
             "JWT token does not contain a 'sub' claim. "
             "Cannot determine user identity."
         )
+
+    logger.info("Extracted user_id from JWT: %s", user_id)
+    return user_id
+
+
+def extract_user_id_from_request(request: Request) -> str:
+    """Extract user ID from JWT token in a FastAPI Request's Authorization header.
+
+    Same logic as extract_user_id_from_context but for AG-UI patterns that use
+    raw FastAPI instead of BedrockAgentCoreApp (which provides RequestContext).
+    """
+    auth_header = request.headers.get("authorization")
+    if not auth_header:
+        raise ValueError("No Authorization header found")
+
+    token = (
+        auth_header.replace("Bearer ", "")
+        if auth_header.startswith("Bearer ")
+        else auth_header
+    )
+
+    claims = jwt.decode(
+        jwt=token,
+        options={"verify_signature": False},
+        algorithms=["RS256"],
+    )
+
+    user_id = claims.get("sub")
+    if not user_id:
+        raise ValueError("JWT token does not contain a 'sub' claim")
 
     logger.info("Extracted user_id from JWT: %s", user_id)
     return user_id

@@ -1,0 +1,7 @@
+strands-agents>=1.24.0
+ag-ui-strands>=0.1.0
+ag-ui-protocol>=0.1.10
+uvicorn>=0.34.0
+bedrock-agentcore[strands-agents]>=1.2.0
+mcp>=1.26.0
+PyJWT[crypto]>=2.10.1

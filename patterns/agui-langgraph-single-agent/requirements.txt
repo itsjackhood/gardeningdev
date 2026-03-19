@@ -1,0 +1,13 @@
+# LangGraph AG-UI agent dependencies with pinned versions
+langgraph==1.0.10rc1
+langchain-aws==1.0.0
+langchain-mcp-adapters==0.1.13
+langgraph-checkpoint-aws==1.0.1
+mcp>=1.23.1
+bedrock-agentcore>=1.2.0
+PyJWT[crypto]>=2.10.1
+# AG-UI dependencies
+ag-ui-langgraph>=0.0.27
+ag-ui-protocol>=0.1.10
+uvicorn>=0.34.0
+fastapi>=0.115.0

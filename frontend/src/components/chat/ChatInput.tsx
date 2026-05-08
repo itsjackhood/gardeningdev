@@ -3,7 +3,7 @@
 import { FormEvent, KeyboardEvent, useRef, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
-import { Loader2Icon, Send } from "lucide-react"
+import { Loader2Icon, Send, Sunset } from "lucide-react"
 
 interface ChatInputProps {
   input: string
@@ -11,6 +11,8 @@ interface ChatInputProps {
   handleSubmit: (e: FormEvent) => void
   isLoading: boolean
   className?: string
+  /** Optional callback triggered when the user clicks "End My Day" */
+  onEndDay?: () => void
 }
 
 export function ChatInput({
@@ -19,6 +21,7 @@ export function ChatInput({
   handleSubmit,
   isLoading,
   className = "",
+  onEndDay,
 }: ChatInputProps) {
   const textareaRef = useRef<HTMLTextAreaElement>(null)
 
@@ -66,6 +69,19 @@ export function ChatInput({
           rows={1}
           autoFocus
         />
+
+        {onEndDay && (
+          <Button
+            type="button"
+            onClick={onEndDay}
+            disabled={isLoading}
+            variant="outline"
+            className="h-10 whitespace-nowrap"
+          >
+            <Sunset className="h-4 w-4 mr-2" />
+            End My Day
+          </Button>
+        )}
 
         <Button type="submit" disabled={!input.trim() || isLoading} className="h-10">
           {isLoading ? (

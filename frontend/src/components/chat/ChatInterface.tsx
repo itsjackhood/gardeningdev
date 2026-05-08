@@ -254,6 +254,15 @@ export default function ChatInterface() {
     // If you want a new session ID, you'd need to remount the component
   }
 
+  // Send a predefined end-of-day prompt to get a gardening day summary
+  const handleEndDay = () => {
+    sendMessage(
+      "Please give me an end-of-day gardening summary. Recap what we discussed today, " +
+        "note any important reminders (watering, harvesting, weather), and suggest a short " +
+        "prioritized task list for tomorrow."
+    )
+  }
+
   // Check if this is the initial state (no messages)
   const isInitialState = messages.length === 0
 
@@ -281,8 +290,11 @@ export default function ChatInterface() {
 
           {/* Centered welcome message */}
           <div className="text-center mb-6">
-            <h2 className="text-2xl font-bold text-gray-800">Welcome to FAST Chat</h2>
-            <p className="text-gray-600 mt-2">Ask me anything to get started</p>
+            <h2 className="text-2xl font-bold text-gray-800">Welcome to Garden Assistant</h2>
+            <p className="text-gray-600 mt-2">
+              Ask me anything about your garden, or click &ldquo;End My Day&rdquo; for a daily
+              summary and tomorrow&apos;s priorities.
+            </p>
           </div>
 
           {/* Centered input */}
@@ -292,6 +304,7 @@ export default function ChatInterface() {
               setInput={setInput}
               handleSubmit={handleSubmit}
               isLoading={isLoading}
+              onEndDay={handleEndDay}
             />
           </div>
 
@@ -321,6 +334,7 @@ export default function ChatInterface() {
                 setInput={setInput}
                 handleSubmit={handleSubmit}
                 isLoading={isLoading}
+                onEndDay={handleEndDay}
               />
             </div>
           </div>

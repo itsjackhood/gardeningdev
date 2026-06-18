@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Case Study – Contact Centre Modernisation | Armakuni</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --ak-dark:    #0B0E1A;
+    --ak-teal:    #00C8B0;
+    --ak-purple:  #6C3CE1;
+    --ak-light:   #F5F6FA;
+    --aws-orange: #FF9900;
+    --aws-dark:   #232F3E;
+    --text:       #1A1D2E;
+    --muted:      #5A5F75;
+    --border:     #E2E4EF;
+    --white:      #FFFFFF;
+  }
+
+  html, body {
+    width: 210mm;
+    min-height: 297mm;
+    font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif;
+    font-size: 8.4pt;
+    color: var(--text);
+    background: var(--white);
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  /* ── HEADER ── */
+  .header {
+    background: var(--ak-dark);
+    padding: 18px 24px 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+
+  .header-left { flex: 1; }
+
+  .logo-mark {
+    font-size: 13pt;
+    font-weight: 800;
+    color: var(--white);
+    letter-spacing: -0.5px;
+    margin-bottom: 8px;
+  }
+  .logo-mark span { color: var(--ak-teal); }
+
+  .header-tag {
+    display: inline-block;
+    background: rgba(0,200,176,0.15);
+    border: 1px solid var(--ak-teal);
+    color: var(--ak-teal);
+    font-size: 6.5pt;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    border-radius: 3px;
+    margin-bottom: 10px;
+  }
+
+  .header-title {
+    font-size: 16pt;
+    font-weight: 800;
+    color: var(--white);
+    line-height: 1.2;
+    letter-spacing: -0.5px;
+    max-width: 390px;
+  }
+
+  .header-sub {
+    margin-top: 6px;
+    font-size: 8pt;
+    color: rgba(255,255,255,0.6);
+    font-weight: 400;
+    max-width: 380px;
+    line-height: 1.5;
+  }
+
+  .header-right {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 8px;
+    min-width: 140px;
+  }
+
+  /* ── STATS BAR ── */
+  .stats-bar {
+    background: var(--ak-teal);
+    display: flex;
+    padding: 0;
+  }
+
+  .stat-item {
+    flex: 1;
+    text-align: center;
+    padding: 9px 8px;
+    border-right: 1px solid rgba(0,0,0,0.1);
+  }
+  .stat-item:last-child { border-right: none; }
+
+  .stat-number {
+    font-size: 15pt;
+    font-weight: 800;
+    color: var(--ak-dark);
+    line-height: 1;
+  }
+
+  .stat-label {
+    font-size: 6.2pt;
+    font-weight: 600;
+    color: rgba(11,14,26,0.7);
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    margin-top: 2px;
+  }
+
+  /* ── BODY ── */
+  .body {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+    padding: 18px 24px 0;
+  }
+
+  .col-left { padding-right: 16px; border-right: 1px solid var(--border); }
+  .col-right { padding-left: 16px; }
+
+  /* ── SECTION ── */
+  .section { margin-bottom: 14px; }
+
+  .section-label {
+    font-size: 6pt;
+    font-weight: 700;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    color: var(--ak-purple);
+    margin-bottom: 5px;
+    padding-bottom: 4px;
+    border-bottom: 2px solid var(--ak-purple);
+    display: inline-block;
+  }
+
+  .section-label.aws { color: var(--aws-orange); border-bottom-color: var(--aws-orange); }
+
+  .section p {
+    font-size: 8pt;
+    line-height: 1.55;
+    color: var(--text);
+    margin-bottom: 6px;
+  }
+
+  /* ── CHALLENGE BLOCK ── */
+  .challenge-block {
+    background: var(--ak-light);
+    border-left: 3px solid var(--ak-purple);
+    padding: 9px 11px;
+    margin-bottom: 10px;
+    border-radius: 0 4px 4px 0;
+  }
+  .challenge-block p { margin-bottom: 0; font-size: 7.8pt; }
+
+  /* ── SOW TABLE ── */
+  .sow-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 10px;
+  }
+  .sow-table th {
+    background: var(--ak-dark);
+    color: var(--white);
+    font-size: 6.2pt;
+    font-weight: 600;
+    letter-spacing: 0.6px;
+    text-transform: uppercase;
+    padding: 5px 8px;
+    text-align: left;
+  }
+  .sow-table td {
+    font-size: 7.5pt;
+    padding: 5px 8px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+    line-height: 1.4;
+  }
+  .sow-table tr:last-child td { border-bottom: none; }
+  .sow-table tr:nth-child(odd) td { background: var(--ak-light); }
+
+  /* ── OUTCOMES ── */
+  .outcome-item {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 9px;
+    align-items: flex-start;
+  }
+
+  .outcome-icon {
+    flex-shrink: 0;
+    width: 18px;
+    height: 18px;
+    background: var(--ak-teal);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 7.5pt;
+    font-weight: 800;
+    color: var(--ak-dark);
+    margin-top: 0px;
+  }
+
+  .outcome-body strong {
+    display: block;
+    font-size: 7.8pt;
+    font-weight: 700;
+    color: var(--text);
+    line-height: 1.3;
+    margin-bottom: 2px;
+  }
+
+  .outcome-body p {
+    font-size: 7.4pt;
+    color: var(--muted);
+    line-height: 1.45;
+    margin: 0;
+  }
+
+  /* ── AWS SECTION ── */
+  .aws-section {
+    background: var(--aws-dark);
+    padding: 11px 24px;
+    margin-top: 14px;
+  }
+
+  .aws-section .section-label { color: var(--aws-orange); border-bottom-color: var(--aws-orange); margin-bottom: 8px; }
+
+  .aws-grid {
+    display: flex;
+    gap: 0;
+    align-items: flex-start;
+  }
+
+  .aws-competencies {
+    flex: 1;
+  }
+
+  .comp-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+  }
+
+  .comp-badge {
+    background: rgba(255,153,0,0.15);
+    border: 1px solid rgba(255,153,0,0.4);
+    color: var(--aws-orange);
+    font-size: 6.2pt;
+    font-weight: 600;
+    padding: 3px 7px;
+    border-radius: 3px;
+    white-space: nowrap;
+  }
+
+  .aws-tier {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 4px;
+    min-width: 140px;
+  }
+
+  .aws-premier {
+    background: var(--aws-orange);
+    color: var(--aws-dark);
+    font-size: 7pt;
+    font-weight: 800;
+    padding: 4px 10px;
+    border-radius: 3px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .aws-validated {
+    font-size: 6pt;
+    color: rgba(255,255,255,0.5);
+    font-weight: 500;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+  }
+
+  /* ── NEXT / FOOTER ── */
+  .bottom-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+    padding: 0 24px;
+    margin-top: 14px;
+  }
+
+  .next-section { padding-right: 16px; border-right: 1px solid var(--border); }
+  .contact-section { padding-left: 16px; }
+
+  .next-section p, .contact-section p {
+    font-size: 7.6pt;
+    line-height: 1.55;
+    color: var(--muted);
+  }
+
+  .contact-section strong { color: var(--text); }
+
+  /* ── FOOTER BAR ── */
+  .footer {
+    background: var(--ak-dark);
+    padding: 7px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 14px;
+  }
+
+  .footer-logo {
+    font-size: 9pt;
+    font-weight: 800;
+    color: var(--white);
+    letter-spacing: -0.3px;
+  }
+  .footer-logo span { color: var(--ak-teal); }
+
+  .footer-url {
+    font-size: 7pt;
+    color: rgba(255,255,255,0.45);
+  }
+
+  @page {
+    size: A4;
+    margin: 0;
+  }
+  @media print {
+    html, body { width: 210mm; height: 297mm; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-left">
+    <div class="logo-mark">arma<span>kuni</span></div>
+    <div class="header-tag">Case Study</div>
+    <div class="header-title">Contact Centre Modernisation for a Regulated Medicare Insurance Enrolment Company</div>
+    <div class="header-sub">Amazon Connect stabilisation, modernisation, and outbound orchestration in a PHI-regulated environment</div>
+  </div>
+  <div class="header-right">
+    <!-- AWS Partner mark -->
+    <svg width="110" height="46" viewBox="0 0 110 46" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect width="110" height="46" rx="4" fill="#232F3E"/>
+      <text x="9" y="16" font-family="Arial, sans-serif" font-size="7" font-weight="bold" fill="#FF9900" letter-spacing="0.5">AWS</text>
+      <text x="26" y="16" font-family="Arial, sans-serif" font-size="6.5" fill="white">Partner Network</text>
+      <rect x="9" y="20" width="92" height="0.8" fill="rgba(255,255,255,0.2)"/>
+      <text x="9" y="31" font-family="Arial, sans-serif" font-size="6" font-weight="bold" fill="#FF9900">PREMIER TIER</text>
+      <text x="9" y="40" font-family="Arial, sans-serif" font-size="5.5" fill="rgba(255,255,255,0.7)">Validated by AWS</text>
+    </svg>
+  </div>
+</div>
+
+<!-- STATS BAR -->
+<div class="stats-bar">
+  <div class="stat-item">
+    <div class="stat-number">4 wk</div>
+    <div class="stat-label">Assessment → 12-month POD</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-number">600</div>
+    <div class="stat-label">Agents on Platform</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-number">3</div>
+    <div class="stat-label">SOWs Earned</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-number">6</div>
+    <div class="stat-label">Measurable Outcomes</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-number">AWS</div>
+    <div class="stat-label">Funded Engagement</div>
+  </div>
+</div>
+
+<!-- BODY -->
+<div class="body">
+
+  <!-- LEFT COLUMN -->
+  <div class="col-left">
+
+    <div class="section">
+      <div class="section-label">The Challenge</div>
+      <div class="challenge-block">
+        <p>A large Medicare Advantage enrollment BPO ran a competitive partner selection after a previous vendor left an underperforming Amazon Connect implementation. Armakuni won on an assessment-first approach — providing the first honest picture of the platform before writing any code.</p>
+      </div>
+      <p>Scale: 600 agents. Multi-tenant BPO serving multiple Medicare Advantage health plan clients. Ranked among Illinois' top 5 billers for SMBs.</p>
+      <p>A four-week assessment grew into a 12-month Connect Development POD, which expanded to include a dedicated Outbound Phase engagement.</p>
+    </div>
+
+    <div class="section">
+      <div class="section-label">What We Built</div>
+      <table class="sow-table">
+        <thead>
+          <tr>
+            <th>Engagement</th>
+            <th>Scope</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Platform Assessment SOW</strong></td>
+            <td>Fixed scope. Current-state report, risk plan, architecture diagram, configuration workbook, execution plan.</td>
+          </tr>
+          <tr>
+            <td><strong>Connect Development POD</strong></td>
+            <td>12-month retainer, 100 hrs/month. CI/CD pipelines, PR workflows, PHI-compliant deployment model.</td>
+          </tr>
+          <tr>
+            <td><strong>Outbound Phase POD</strong></td>
+            <td>3-month engagement, 200 hrs/month. Stateful orchestration layer with deterministic lifecycle management.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+
+  <!-- RIGHT COLUMN -->
+  <div class="col-right">
+
+    <div class="section">
+      <div class="section-label">Outcomes</div>
+
+      <div class="outcome-item">
+        <div class="outcome-icon">1</div>
+        <div class="outcome-body">
+          <strong>Assessment-first approach won a competitive partner selection</strong>
+          <p>Armakuni gave leadership a clear, honest picture of what was broken and a sequenced plan to fix it — before any code was written or budget committed.</p>
+        </div>
+      </div>
+
+      <div class="outcome-item">
+        <div class="outcome-icon">2</div>
+        <div class="outcome-body">
+          <strong>First honest baseline unlocked the right investment and structure</strong>
+          <p>Before the assessment, the BPO had no reliable picture of its own platform. The four-week engagement delivered five artefacts that validated pod sizing on evidence.</p>
+        </div>
+      </div>
+
+      <div class="outcome-item">
+        <div class="outcome-icon">3</div>
+        <div class="outcome-body">
+          <strong>600 agents operating with improved stability and release governance</strong>
+          <p>Frequent bugs, uncontrolled releases, and missing platform features are being addressed systematically. CI/CD, PR workflows, and a PHI-compliant deployment model are in place for the first time.</p>
+        </div>
+      </div>
+
+      <div class="outcome-item">
+        <div class="outcome-icon">4</div>
+        <div class="outcome-body">
+          <strong>Supervisors now act on problems before customers feel them</strong>
+          <p>Real-time dashboards, Contact Lens in-call analytics, and structured CloudWatch monitoring. Medicare disclaimer compliance monitoring is now automated.</p>
+        </div>
+      </div>
+
+      <div class="outcome-item">
+        <div class="outcome-icon">5</div>
+        <div class="outcome-body">
+          <strong>Outbound now runs on a stateful orchestration layer</strong>
+          <p>Manual recycling, fragile campaign progression, and disposition-based reporting replaced. Policy enforcement, automated outcomes, and lifecycle-based metrics.</p>
+        </div>
+      </div>
+
+      <div class="outcome-item">
+        <div class="outcome-icon">6</div>
+        <div class="outcome-body">
+          <strong>Engagement expanded across three SOWs as each phase delivered</strong>
+          <p>Started with a four-week, $5,000 assessment. That earned a 12-month POD. The POD earned the Outbound Phase. Land-and-expand as a direct result of the assessment-first model.</p>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</div>
+
+<!-- BOTTOM ROW -->
+<div class="bottom-row">
+  <div class="next-section">
+    <div class="section-label" style="color:#6C3CE1; border-bottom-color:#6C3CE1;">What's Next</div>
+    <p style="margin-top:6px;">Full CCP migration from NeuraFlash Desktop, advanced outbound dial-rate optimisation, agent onboarding/offboarding automation with HR system integration, and continued infrastructure modernisation under ongoing pod engagement.</p>
+  </div>
+  <div class="contact-section">
+    <div class="section-label" style="color:#6C3CE1; border-bottom-color:#6C3CE1;">About Armakuni</div>
+    <p style="margin-top:6px;">AWS Premier Tier Partner delivering contact centre modernisation, generative AI, and platform engineering for regulated industries. We start with an assessment — not a proposal.</p>
+    <p style="margin-top:5px;"><strong>armakuni.com</strong> &nbsp;|&nbsp; Amazon Connect &nbsp;·&nbsp; PHI/HIPAA environments &nbsp;·&nbsp; Medicare &amp; Benefits</p>
+  </div>
+</div>
+
+<!-- AWS SECTION -->
+<div class="aws-section">
+  <div class="aws-grid">
+    <div class="aws-competencies">
+      <div class="section-label aws">AWS Competencies</div>
+      <div class="comp-list" style="margin-top:7px;">
+        <span class="comp-badge">DevOps Consulting</span>
+        <span class="comp-badge">Migration &amp; Modernization</span>
+        <span class="comp-badge">AI Services</span>
+        <span class="comp-badge">Healthcare Consulting</span>
+        <span class="comp-badge">Data &amp; Analytics</span>
+        <span class="comp-badge">Generative AI</span>
+      </div>
+    </div>
+    <div class="aws-tier">
+      <span class="aws-premier">Premier Tier Partner</span>
+      <span class="aws-validated">Validated by AWS</span>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+  <div class="footer-logo">arma<span>kuni</span></div>
+  <div class="footer-url">armakuni.com &nbsp;·&nbsp; AWS Premier Tier Partner &nbsp;·&nbsp; Contact Centre &amp; AI for Regulated Industries</div>
+</div>
+
+</body>
+</html>
